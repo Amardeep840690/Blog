@@ -34,40 +34,42 @@ function Signup() {
     setLoad(false);
   };
   return (
-    <div className="flex items-center justify-center">
-      <div
-        className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}
-      >
-        <div className="mb-2 flex justify-center">
-          <span className="inline-block w-full max-w-[100px]">
-            <Logo width="100%" />
-          </span>
-        </div>
-        <h2 className="text-center text-2xl font-bold leading-tight">
-          Sign up to create account
-        </h2>
-        <p className="mt-2 text-center text-base text-black/60">
-          Already have an account?&nbsp;
-          <Link
-            to="/login"
-            className="font-medium text-primary transition-all duration-200 hover:underline"
-          >
-            Sign In
-          </Link>
-        </p>
-        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="mb-6 flex justify-center">
+            <span className="inline-block w-full max-w-[100px]">
+              <Logo width="100%" />
+            </span>
+          </div>
+          <h2 className="text-center text-3xl font-bold text-gray-800 mb-2">
+            Create account
+          </h2>
+          <p className="text-center text-gray-600 mb-8">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"
+            >
+              Sign in
+            </Link>
+          </p>
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-600 text-sm text-center">{error}</p>
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit(Create)}>
-          <div className="space-y-5">
+          <form onSubmit={handleSubmit(Create)} className="space-y-6">
             <Input
-              label="Full Name:"
+              label="Full Name"
               placeholder="Enter your full name"
               {...register("name", {
                 required: true,
               })}
             />
             <Input
-              label="Email:"
+              label="Email"
               placeholder="Enter your email"
               type="email"
               {...register("email", {
@@ -80,18 +82,22 @@ function Signup() {
               })}
             />
             <Input
-              label="Password:"
+              label="Password"
               type="password"
               placeholder="Enter your password"
               {...register("password", {
                 required: true,
               })}
             />
-            <Button type="submit" className="w-full">
-              {load ? "Creating . . ." : "Create Account"}
+            <Button 
+              type="submit" 
+              className="w-full bg-blue-600 hover:bg-blue-700"
+              disabled={load}
+            >
+              {load ? "Creating account..." : "Create Account"}
             </Button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
