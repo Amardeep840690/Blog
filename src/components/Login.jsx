@@ -4,16 +4,18 @@ import { login as authLogin } from "../store/authSlice";
 import { Button, Input, Logo } from "./index";
 import { useDispatch } from "react-redux";
 import authService from "../appwrite/auth";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
+  const [load , setLoad]=useState(false);
 
   const login = async (data) => {
     setError("");
+    setLoad(true);
     try {
       const session = await authService.login(data);
       if (session) {
@@ -26,6 +28,7 @@ function Login() {
     } catch (error) {
       setError(error.message);
     }
+    setLoad(false);
   };
 
   return (
@@ -78,7 +81,7 @@ function Login() {
             type="submit"
             className="w-full"
             >
-                Sign in
+               {load ? "Sign in . . ." : "Sign in"}
             </Button>
           </div>
         </form>
