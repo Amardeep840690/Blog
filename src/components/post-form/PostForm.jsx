@@ -60,7 +60,7 @@ function PostForm({ post }) {
         }
       }
     }
-    setLoad(fasle);
+    setLoad(false);
   };
 
   const slugTransform = useCallback((value) => {
