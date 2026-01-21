@@ -50,7 +50,7 @@ function PostForm({ post }) {
 
         const dbPost = await service.createPost({
           ...data,
-          UserId: userData.userData?.$id,
+          UserId: (userData.userData?.$id || userData.$id),
         });
         // console.log(dbPost);
         console.log("dbpost");
