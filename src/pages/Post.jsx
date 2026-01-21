@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import service from "../appwrite/config";
 import { Button, Container } from "../components";
@@ -12,7 +12,13 @@ export default function Post() {
   const navigate = useNavigate();
 
   const userData = useSelector((state) => state.auth.userData);
-  const isAuthor = post?.UserId === userData?.userData?.$id;
+  const authStatus = useSelector((state) => state.auth.status);
+
+  const isAuthor = useMemo(() => {
+    if (!authStatus || !userData || !post) return false;
+    const userId = userData.userData?.$id || userData.$id;
+    return post.UserId === userId;
+  }, [authStatus, userData, post]);
 
   useEffect(() => {
     if (slug) {
@@ -25,7 +31,7 @@ export default function Post() {
   }, [slug, navigate]);
 
   const deletePost = () => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
+    if (confirm("Are you sure you want to delete this post?")) {
       service.deletepost(post.$id).then((status) => {
         if (status) {
           service.deleteFile(post.featuredImage);
@@ -50,6 +56,7 @@ export default function Post() {
     <div className="min-h-screen bg-gray-50 py-12">
       <Container>
         <article className="max-w-4xl mx-auto">
+          {/* Featured Image */}
           <div className="relative mb-8 rounded-2xl overflow-hidden shadow-xl">
             <img
               src={service.getFilePreview(post.featuredImage)}
@@ -74,6 +81,7 @@ export default function Post() {
             )}
           </div>
 
+          {/* Post Content */}
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <header className="mb-8">
               <h1 className="text-4xl font-bold text-gray-800 mb-4 leading-tight">
@@ -93,7 +101,9 @@ export default function Post() {
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-                <span>Published on {post.$createdAt.slice(0,10)}</span>
+                <span>
+                  Published on {new Date(post.$createdAt).toLocaleDateString()}
+                </span>
               </div>
             </header>
 
@@ -104,6 +114,7 @@ export default function Post() {
             </div>
           </div>
 
+          {/* Back to posts */}
           <div className="mt-8 text-center">
             <Link
               to="/all-posts"

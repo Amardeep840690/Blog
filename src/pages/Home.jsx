@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import service from "../appwrite/config";
 import { Container, PostCard } from "../components";
 import { useSelector } from "react-redux";
@@ -9,15 +9,15 @@ function Home() {
   const status = useSelector((state) => state.auth.status);
 
   useEffect(() => {
-    service.getPosts([]).then((posts) => {
-      if (posts) {
-        setPosts(posts.documents);
-      }
-    });
-  }, []);
-  // console.log(posts);
-
-  if (posts.length === 0) {
+      service.getPosts([]).then((posts) => {
+        if (posts) {
+          setPosts(posts.documents);
+        }
+      });
+      setPosts([]);
+  }, [status]);
+  
+  if (!status || posts.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Container>
@@ -59,6 +59,7 @@ function Home() {
       </div>
     );
   }
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <Container>
